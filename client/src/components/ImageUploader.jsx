@@ -109,8 +109,8 @@ const ImageUpload = () => {
                 )}
               </div>
             </div>
-            <button className="upload-btn" onClick={handleUpload}>
-              {uploadStatus === "select" || uploadStatus === 'uploading' ? "Upload" : "Done"}
+            <button className="recognize-btn" onClick={handleUpload}>
+              {uploadStatus === "select" || uploadStatus === 'Recognizing' ? "Recognize" : "Done"}
             </button>
           </>
         )}
