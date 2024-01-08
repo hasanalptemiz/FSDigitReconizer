@@ -1,51 +1,121 @@
-import React from "react";
+import React, {useRef, useState} from "react";
 import './ImageUploader.css'
+import axios from "axios";
 
-
-const ImageUploader = () => {
-
-    const inputRef = React.useRef();
-
-    //State cariables for tracking image-related informations
-    const [image, setImage] = React.useState(null);
-    const [progress, setProgress] = React.useState(0);
-    const [processStatus, setProcessStatus] = React.useState("select"); //select, processing, done
-
-    //Handles image change
-    const handleImageChange = (e) => {
-        if (e.target.files[0] && e.target.files[0].type.includes("file")) {
-            setImage(e.target.files[0]);
-            setProcessStatus("processing");
-        }
-        
+const ImageUpload = () => {
+    const inputRef = useRef();
+  
+    const [image, setImage] = useState(null);
+    const [progress, setProgress] = useState(0);
+    const [uploadStatus, setUploadStatus] = useState("select");
+  
+    const handleFileChange = (event) => {
+      if (event.target.files && event.target.files.length > 0) {
+        setImage(event.target.files[0]);
+      }
     };
-
-    //Handles image upload
-
+  
     const onChooseFile = () => {
-        inputRef.current.click();
-    }
-    
-
+      inputRef.current.click();
+    };
+  
+    const clearImageinput = () => {
+      inputRef.current.value = "";
+      setImage(null);
+      setProgress(0);
+      setUploadStatus("select");
+    };
+  
+    const handleUpload = async () => {
+      if (uploadStatus === "done") {
+        clearImageinput();
+        return;
+      }
+  
+      try {
+        setUploadStatus("uploading");
+  
+        const formData = new FormData();
+        formData.append("file", image);
+  
+        const response = await axios.post(
+          "http://localhost:8000/api/upload",
+          formData,
+          {
+            onUploadProgress: (progressEvent) => {
+              const percentCompleted = Math.round(
+                (progressEvent.loaded * 100) / progressEvent.total
+              );
+              setProgress(percentCompleted);
+            },
+          }
+        );
+  
+        setUploadStatus("done");
+      } catch (error) {
+        setUploadStatus("select");
+      }
+    };
+  
     return (
-        <div>
-            {/*Image input*/} 
-            <input 
-            type="file" 
-            ref={inputRef} 
-            onChange={handleImageChange} 
-            style={{display: "none"}}
-            />
-
-            {/*Upload button*/}
-            {!image && (
-                <button className="image-uploader-button" onClick={onChooseFile}>
-                    <span className="mateial-icons">Choose File</span>
-                    Upload File
-                    </button>
-            )}
-        </div>
+      <div>
+        <input
+          ref={inputRef}
+          type="file"
+          onChange={handleFileChange}
+          style={{ display: "none" }}
+        />
+  
+        {/* Button to trigger the file input dialog */}
+        {!image && (
+          <button className="file-btn" onClick={onChooseFile}>
+            <span className="material-symbols-outlined">upload</span> Upload File
+          </button>
+        )}
+  
+        {image && (
+          <>
+            <div className="file-card">
+              <span className="material-symbols-outlined icon">description</span>
+  
+              <div className="file-info">
+                <div style={{ flex: 1 }}>
+                  <h6>{image?.name}</h6>
+  
+                  <div className="progress-bg">
+                    <div className="progress" style={{ width: `${progress}%` }} />
+                  </div>
+                </div>
+  
+                {uploadStatus === "select" ? (
+                  <button onClick={clearImageinput}>
+                    <span class="material-symbols-outlined close-icon">
+                      close
+                    </span>
+                  </button>
+                ) : (
+                  <div className="check-circle">
+                    {uploadStatus === "uploading" ? (
+                      `${progress}%`
+                    ) : uploadStatus === "done" ? (
+                      <span
+                        class="material-symbols-outlined"
+                        style={{ fontSize: "20px" }}
+                      >
+                        check
+                      </span>
+                    ) : null}
+                  </div>
+                )}
+              </div>
+            </div>
+            <button className="upload-btn" onClick={handleUpload}>
+              {uploadStatus === "select" || uploadStatus === 'uploading' ? "Upload" : "Done"}
+            </button>
+          </>
+        )}
+      </div>
     );
-}
-
-export default ImageUploader;
+  };
+  
+  export default ImageUpload;
