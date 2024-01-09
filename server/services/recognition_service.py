@@ -3,6 +3,13 @@ from fastapi import UploadFile
 from PIL import Image
 from io import BytesIO
 from random import randint
+from models.model import mnist
+from torchvision import transforms
+import torch
+
+
+ai_model = mnist(pretrained  = True)
+
 
 def is_image(file: UploadFile):
     # supported images
@@ -20,8 +27,20 @@ def is_image(file: UploadFile):
 
 def recognize_image(image: Image.Image) -> int:
     #AI Process
-    random_int = randint(0, 9)
-    return random_int
+    #Convert image to torch tensor : 
+    
+
+    image = transforms.PILToTensor()(image).float()
+
+    #Normalize image :
+    image = transforms.Normalize((0.1307,), (0.3081,))(image)
+
+    #Run inference :
+    output = ai_model(image)
+
+    #Get the predicted digit :
+    predicted_digit = output.argmax().item()
+    return predicted_digit
 
 async def process_image(file: UploadFile) -> dict:
     try:
@@ -36,10 +55,10 @@ async def process_image(file: UploadFile) -> dict:
             img = Image.open(BytesIO(contents))
         except Exception as e:
             raise HTTPException(status_code=400, detail="Invalid image file.")
-
         # Ai model function call
-        predicted_digit = recognize_image(contents)
-
+        predicted_digit = recognize_image(img)
+        
         return {"predicted_digit": predicted_digit}
+    
     except Exception as e:
         return {"error": str(e)}
