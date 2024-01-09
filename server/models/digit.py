@@ -1,6 +1,6 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
+from fastapi import UploadFile
 
 
-class Digit(BaseModel):
-    digit : int 
-    
+class PredictRequest(BaseModel):
+    image: UploadFile
