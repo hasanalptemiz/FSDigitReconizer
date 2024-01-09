@@ -19,7 +19,7 @@
 
 .file-btn:hover {
   color: white;
-  background-color: dimgrey;
+  background-color: black;
 }
 
 .file-btn span {
@@ -37,7 +37,7 @@
 
 .file-btn span:hover {
   color: white;
-  background-color: dimgrey;
+  background-color: black;
 }
 
 .file-card {

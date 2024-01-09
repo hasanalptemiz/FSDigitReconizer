@@ -13,6 +13,7 @@ const ImageUpload = () => {
     const handleFileChange = (event) => {
       if (event.target.files && event.target.files.length > 0) {
         setImage(event.target.files[0]);
+        
       }
     };
   
@@ -26,11 +27,12 @@ const ImageUpload = () => {
       setProgress(0);
       setUploadStatus("select");
     };
-  
+
 
     const handleRecognize = async () => {
       try {
         if (uploadStatus === "done") {
+          setResult(null);
           clearImageinput();
           return;
         }
