@@ -84,7 +84,9 @@ const ImageUpload = () => {
                   alt="preview"
                   className="preview-img"
                 />
-                
+                 {result && (
+                <span className="predicted-digit">{result.predicted_digit}</span>
+                )}
   
                 {uploadStatus === "select" ? (
                   <button onClick={clearImageinput}>

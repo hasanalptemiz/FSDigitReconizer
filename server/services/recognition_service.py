@@ -1,17 +1,17 @@
 from http.client import HTTPException
-from fastapi import Depends,UploadFile, File, APIRouter
+from fastapi import UploadFile
 from PIL import Image
 from io import BytesIO
-
+from random import randint
 
 def is_image(file: UploadFile):
     # supported images
     supported_image_types = ["image/jpeg", "image/png", "image/gif"]
 
-    # get mime type
+    # get MIME type
     content_type = file.content_type.lower()
 
-    # check is the file mime picture type
+    # check is the file MIME picture type
     if content_type not in supported_image_types:
         return False
 
@@ -20,8 +20,8 @@ def is_image(file: UploadFile):
 
 def recognize_image(image: Image.Image) -> int:
     #AI Process
-    return 42
-
+    random_int = randint(0, 9)
+    return random_int
 
 async def process_image(file: UploadFile) -> dict:
     try:
