@@ -1,6 +1,6 @@
 from fastapi import FastAPI, File, UploadFile, HTTPException, Depends , APIRouter
 from fastapi.responses import JSONResponse, StreamingResponse
-from services.recognition_service import process_image
+from app.services.recognition_service import process_image
 
 
 router = APIRouter()

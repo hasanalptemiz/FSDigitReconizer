@@ -10,9 +10,10 @@ const ImageUpload = () => {
     const [uploadStatus, setUploadStatus] = useState("select");
     const [result, setResult] = useState(null); 
   
-    const handleFileChange = (event) => {
+    const handleFileChange = async (event) => {
       if (event.target.files && event.target.files.length > 0) {
-        setImage(event.target.files[0]);
+        const resizedImage = await resizeImage(event.target.files[0], 100, 100);
+        setImage(resizedImage);
         
       }
     };
@@ -59,6 +60,28 @@ const ImageUpload = () => {
       }
     };
 
+    // Image resizing function
+    const resizeImage = (image, width, height) => {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.src = URL.createObjectURL(image);
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          canvas.width = width;
+          canvas.height = height;
+          ctx.drawImage(img, 0, 0, width, height);
+          canvas.toBlob((blob) => {
+            const resizedFile = new File([blob], image.name, {
+              type: image.type,
+              lastModified: Date.now(),
+            });
+            resolve(resizedFile);
+          }, image.type);
+        };
+      });
+    };
+
       
     return (
       <div>
@@ -85,6 +108,7 @@ const ImageUpload = () => {
                   src={URL.createObjectURL(image)}
                   alt="preview"
                   className="preview-img"
+                  style={{ width: '100px', height: '100px' }}
                 />
                  {result && (
                 <span className="predicted-digit">{result.predicted_digit}</span>

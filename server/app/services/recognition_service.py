@@ -3,7 +3,7 @@ from fastapi import UploadFile
 from PIL import Image
 from io import BytesIO
 from random import randint
-from models.model import mnist
+from app.models.model import mnist
 from torchvision import transforms
 import torch
 
@@ -27,8 +27,12 @@ def is_image(file: UploadFile):
 
 def recognize_image(image: Image.Image) -> int:
     #AI Process
+    #Convert image to grayscale :
+    image = image.convert("L")
     #Convert image to torch tensor : 
-    
+    #if image size bigger than 28x28, resize it :
+    if image.size[0] != 28 or image.size[1] != 28:
+        image = transforms.Resize((28, 28))(image)
 
     image = transforms.PILToTensor()(image).float()
 

@@ -1,4 +1,4 @@
-from handlers.recognition_handler import get_router
+from app.handlers.recognition_handler import get_router
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
 
