@@ -5,8 +5,6 @@ from app.services.recognition_service import process_image
 
 router = APIRouter()
 
-
-
 @router.post("/recognize")
 async def digit_recognize(file: UploadFile = File(...)):
     try:
