@@ -11,10 +11,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color : dimgrey;
-  background-image: url('bg.jpg'); 
-  background-size: cover; 
-  background-position: center; 
-  background-repeat: no-repeat; 
+  background-color : black;
+  background-image: url('bg.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 100vh;
+
 
 }
