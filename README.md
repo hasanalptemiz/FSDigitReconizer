@@ -4,6 +4,9 @@ Hello, the project consists of client side (React.js) and server side (Python ba
 both frontend and backend in a layered architecture. 
 
 
+
+ ![github](https://github.com/hasanalptemiz/FSDigitReconizer/assets/71789065/12d3cd0a-b3f8-4522-8f62-4d7b7177d778)
+
 You can use the following command to initialise the entire project.
 
 # Run project
